@@ -38,7 +38,11 @@ GeoData location; //we have created a GeoData type, but not an instance of that 
 void setup() {
   Serial.begin(115200);
   delay(10);
-
+  Serial.print("This board is running: ");
+  Serial.println(F(__FILE__));
+  Serial.print("Compiled: ");
+  Serial.println(F(__DATE__ " " __TIME__));
+  
   Serial.print("Connecting to "); Serial.println(ssid);
 
   WiFi.mode(WIFI_STA);
