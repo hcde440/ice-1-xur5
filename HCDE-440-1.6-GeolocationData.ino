@@ -18,8 +18,9 @@
 #include <ArduinoJson.h> //provides the ability to parse and construct JSON objects
 
 const char* ssid = "YOUR WIFI NETWORK NAME HERE";
-const char* pass = "YOU WIFI PASSWORD HERE";
+const char* pass = "YOUR WIFI PASSWORD HERE";
 const char* key = "YOUR KEY HERE";
+String ipAddress;
 
 typedef struct { //here we create a new data type definition, a box to hold other data types
   String ip;    //
@@ -57,6 +58,7 @@ void setup() {
   Serial.print("Your ESP has been assigned the internal IP address ");
   Serial.println(WiFi.localIP());
 
+  ipAddress = getIP();
   getGeo();
 
   Serial.println("Your external IP address is " + location.ip);
@@ -91,13 +93,15 @@ String getIP() {
       return "error";
     }
   }
+  Serial.print("Retrieved IP Address from remote endpoint: ");
+  Serial.println(ipAddress);
   return ipAddress;
 }
 
 void getGeo() {
   HTTPClient theClient;
   Serial.println("Making HTTP request");
-  theClient.begin("http://api.ipstack.com/" + getIP() + "?access_key=" + key); //return IP as .json object
+  theClient.begin("http://api.ipstack.com/" + ipAddress + "?access_key=" + key); //return IP as .json object
   int httpCode = theClient.GET();
 
   if (httpCode > 0) {
